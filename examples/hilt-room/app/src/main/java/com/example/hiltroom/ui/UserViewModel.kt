@@ -12,12 +12,11 @@ class UserViewModel @Inject constructor(
     private val userDao: UserDao
 ) : ViewModel() {
 
-    // Uses the nullable Flow from the DAO — this gotcha is still present
-    val activeUsers: Flow<List<User>?> = userDao.observeActiveUsers()
+    val activeUsers: Flow<List<User>> = userDao.observeActiveUsers()
 
-    fun getAllUsers(): List<User>? = userDao.getAllUsers()
+    fun getAllUsers(): List<User> = userDao.getAllUsers()
 
-    fun getUserById(id: Int): User = userDao.getUserById(id)
+    fun getUserById(id: Int): User? = userDao.getUserById(id)
 
     fun insertUser(user: User) = userDao.insertUser(user)
 
