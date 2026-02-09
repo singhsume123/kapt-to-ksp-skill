@@ -121,3 +121,7 @@ See [skill/SKILL.md](skill/SKILL.md) for the full 6-step migration process:
 
 - [Hilt/Dagger Migration](skill/references/hilt.md) — build config changes only, no source changes
 - [Room Migration](skill/references/room.md) — build config changes + DAO source fixes for nullability
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
