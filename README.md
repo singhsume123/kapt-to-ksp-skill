@@ -9,10 +9,12 @@ KAPT is in maintenance mode. KSP reads Kotlin source directly — no stub genera
 ```
 kapt-to-ksp/
 ├── examples/
-│   ├── hilt-only/              # Hilt DI — migrated to KSP
-│   ├── hilt-only-migrated/     # Hilt DI — original KSP reference
-│   ├── room-only/              # Room database — migrated to KSP
-│   └── hilt-room/              # Hilt + Room combined — migrated to KSP
+│   ├── hilt-only/              # Hilt DI — KAPT baseline
+│   ├── hilt-only-migrated/     # Hilt DI — KSP migrated
+│   ├── room-only/              # Room database — KAPT baseline (with gotchas)
+│   ├── room-only-migrated/     # Room database — KSP migrated (gotchas fixed)
+│   ├── hilt-room/              # Hilt + Room — KAPT baseline (with gotchas)
+│   └── hilt-room-migrated/     # Hilt + Room — KSP migrated (gotchas fixed)
 └── skill/
     ├── SKILL.md                # Full 6-step migration workflow
     └── references/
@@ -21,6 +23,8 @@ kapt-to-ksp/
 ```
 
 ## Examples
+
+Each example has a **KAPT baseline** and a **KSP migrated** copy side-by-side, so you can diff them to see exactly what changed.
 
 All examples are standalone, buildable Android projects using:
 
@@ -33,17 +37,17 @@ All examples are standalone, buildable Android projects using:
 | Room | 2.6.1 |
 | Target SDK | 34 |
 
-### hilt-only
+### hilt-only / hilt-only-migrated
 
-Hilt dependency injection migrated to KSP. **Build config changes only** — no source code modifications needed. All annotations (`@HiltAndroidApp`, `@HiltViewModel`, `@Inject`, `@Module`) remain identical.
+Hilt dependency injection. **Build config changes only** — no source code modifications needed. All annotations (`@HiltAndroidApp`, `@HiltViewModel`, `@Inject`, `@Module`) remain identical.
 
-### room-only
+### room-only / room-only-migrated
 
-Room database migrated to KSP with source code fixes for stricter KSP type checking. Demonstrates all common Room DAO gotchas and their fixes.
+Room database. The KAPT baseline contains intentional gotchas (nullable collections, abstract properties, missing nullability) that KSP's stricter type checking catches. The migrated version shows the fixes.
 
-### hilt-room
+### hilt-room / hilt-room-migrated
 
-Combined Hilt + Room project migrated to KSP. Both processors are swapped in the same module — you cannot mix KAPT and KSP within a single module.
+Combined Hilt + Room project. Both processors are swapped in the same module — you cannot mix KAPT and KSP within a single module. Includes DAO gotcha fixes and updated ViewModel signatures.
 
 ## Quick Reference
 
@@ -94,14 +98,12 @@ fun observe(): Flow<List<User>?>       fun observe(): Flow<List<User>>    // non
 Each example is an independent Gradle project. Build from its directory:
 
 ```bash
-cd examples/hilt-only
-./gradlew clean assembleDebug
-
-cd examples/room-only
-./gradlew clean assembleDebug
-
-cd examples/hilt-room
-./gradlew clean assembleDebug
+cd examples/hilt-only && ./gradlew clean assembleDebug
+cd examples/hilt-only-migrated && ./gradlew clean assembleDebug
+cd examples/room-only && ./gradlew clean assembleDebug
+cd examples/room-only-migrated && ./gradlew clean assembleDebug
+cd examples/hilt-room && ./gradlew clean assembleDebug
+cd examples/hilt-room-migrated && ./gradlew clean assembleDebug
 ```
 
 ## Migration Workflow
